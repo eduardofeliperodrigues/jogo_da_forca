@@ -52,6 +52,22 @@ void chuta() {
     chutes[tentativas] = chute;
 }
 
+int enforcado(){
+    int erros = 0; 
+    for (int  i = 0; i < tentativas; i++){
+        int existe = 0;
+        for(int j = 0; j < strlen(palavraSecreta); j++){
+            if (chutes[i] == palavraSecreta[j]){
+                existe = 1;
+            }
+        }
+        
+        if (!existe) erros++;
+    }
+    
+    return erros >= 5;
+}
+
 int main(){
     int acertou = 0;
     int enforcou = 0;
@@ -67,7 +83,5 @@ int main(){
         
         tentativas++;
         
-    }while(!acertou && !enforcou);
-    
-        
+    }while(!acertou && !enforcado());
 }
