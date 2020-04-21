@@ -3,9 +3,9 @@
 #include <time.h>
 #include <stdlib.h>
 #include "forca.h"
+    
 
-
-char palavraSecreta[20];
+char palavraSecreta[tamanhoPalavra];
 char chutes[26];
 int chutesDados = 0;
 
@@ -24,7 +24,7 @@ void adicionaPalavra(){
     
     if(quer == 'S'){
         
-        char novaPalavra[20];
+        char novaPalavra[tamanhoPalavra];
         printf("Qual a nova palavra? ");
         scanf("%s", &novaPalavra);
             
@@ -88,8 +88,25 @@ int jachutou(char letra) {
 }
 
 void desenhaForca() {
+    
+    int erros = chuteserrados();
+    
+    printf("  _______         \n");
+    printf(" |/      |        \n");
+    
+    printf(" |      %c%c%c    \n", (erros >= 1 ? '(' : ' '), (erros >= 1 ? '_' : ' '), (erros >= 1 ? ')' : ' '));
+    
+    printf(" |      %c%c%c    \n", (erros >= 3 ? '\\': ' '),(erros >= 2 ? '|': ' '), (erros >= 3 ? '/': ' '));
+    
+    printf(" |       %c       \n", (erros >= 2 ? '|' : ' '));
+    
+    printf(" |      %c %c     \n", (erros >= 4 ? '/' : ' '), (erros >= 4 ? '\\' : ' '));
+    
+    printf(" |                \n");
+    printf("_|___             \n");
+    printf("\n\n");
 
-    printf("\n\n\nVoce ja deu %d chutes\n\n", chutesDados);
+    printf("\nVoce ja deu %d chutes\n\n", chutesDados);
 
     for(int i = 0; i < strlen(palavraSecreta); i++) {
         
@@ -122,9 +139,8 @@ int acertou(){
     return 1;
 }
 
-int enforcado() {
-
-	int erros = 0;
+int chuteserrados(){
+    int erros = 0;
 
 	for(int i = 0; i < chutesDados; i++) {
 		
@@ -139,8 +155,13 @@ int enforcado() {
 
 		if(!existe) erros++;
 	}
+    
+    return erros;
+}
 
-	return erros >= 5;
+int enforcado() {
+
+	return chuteserrados() >= 5;
 }
 
 
@@ -159,6 +180,11 @@ int main(){
         
     }while(!acertou() && !enforcado());
     
-    desenhaForca();
-    adicionaPalavra();
+    if(!acertou()){
+        printf("\n\nQue pena, voce errou a palavra: %s\n\n", palavraSecreta);
+        
+    }else{
+        printf("\n\nParabens, voce acertou a palavra: %s\n\n", palavraSecreta);
+    }
+    
 }
